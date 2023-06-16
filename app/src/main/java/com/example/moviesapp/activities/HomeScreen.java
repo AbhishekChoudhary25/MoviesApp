@@ -1,5 +1,6 @@
 package com.example.moviesapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
@@ -46,6 +48,10 @@ public class HomeScreen extends AppCompatActivity {
     NetworkReciever networkChangeReceiver;
     List<Fragment> fragments;
 
+    ConnectivityManager connectivityManager;
+
+    Boolean isConnected;
+
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHILD_ACTIVITY) {
@@ -80,12 +86,12 @@ public class HomeScreen extends AppCompatActivity {
         fragments.add(new FravouriteFragment());
         fragments.add(new ProfileFragment());
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        Intent errorIntent = new Intent(HomeScreen.this,ErrorIntent.class);
-        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        networkChangeReceiver = new NetworkReciever(this);
-        registerReceiver(networkChangeReceiver, intentFilter);
+//        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+//        Intent errorIntent = new Intent(HomeScreen.this,ErrorIntent.class);
+//        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+//        networkChangeReceiver = new NetworkReciever(this);
+//        registerReceiver(networkChangeReceiver, intentFilter);
 
 
         viewPager.setAdapter(new HomeScreenViewPagerAdapter(getSupportFragmentManager(),getLifecycle(),fragments));
@@ -125,6 +131,49 @@ public class HomeScreen extends AppCompatActivity {
         unregisterReceiver(networkChangeReceiver);
     }
 
+    private void registerNetworkCallback(){
+
+        try{
+            connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback(){
+                @Override
+                public void onAvailable(@NonNull Network network) {
+                    super.onAvailable(network);
+                    isConnected = true;
+
+                }
+
+                @Override
+                public void onUnavailable() {
+                    super.onUnavailable();
+
+                    isConnected = false;
+                }
+            });
+        }
+        catch (Exception e){
+            isConnected = false;
+        }
+    }
+
+
+    private void unregisterNetworkCallback(){
+            connectivityManager.unregisterNetworkCallback(new ConnectivityManager.NetworkCallback());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        registerNetworkCallback();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        unregisterNetworkCallback();
+    }
 
 
 }
