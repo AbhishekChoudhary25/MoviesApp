@@ -1,0 +1,18 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MoviesApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowIsTranslucent" >true</item>
+    </style>
+
+    <style name="Theme.MoviesApp" parent="Base.Theme.MoviesApp" />
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_backgroud</item>
+        <item name="colorPrimary">@color/main_colour_theme</item>
+        <item name="colorPrimaryDark">@color/main_colour_theme</item>
+        <item name="colorAccent">@color/main_colour_theme</item>
+        <item name="android:statusBarColor">@color/main_colour_theme</item>
+    </style>
+</resources>
