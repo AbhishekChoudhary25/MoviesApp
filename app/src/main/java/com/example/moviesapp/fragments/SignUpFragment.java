@@ -83,27 +83,38 @@ public class SignUpFragment extends Fragment {
                     passwordTextFieldLayout.setError("Password field cannot be null!");
                 }
 
-                databaseHelper.userDetailsDAO().adduser(new UserDetails(emailEditText.getText().toString(),passwordEditText.getText().toString(),"male"));
+                UserDetails user = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString());
 
-                Dialog dialog = new Dialog(getContext());
+                if(user != null){
+                    emailTextFieldLayout.setError("User already exists!");
+                }
 
-                dialog.setContentView(R.layout.sucess_layout);
 
-                dialog.setCancelable(false);
+                if(emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null){
+                    databaseHelper.userDetailsDAO().adduser(new UserDetails(emailEditText.getText().toString(),passwordEditText.getText().toString(),"male"));
 
-                yesAlertBtn = dialog.findViewById(R.id.alertYesBtn);
+                    Dialog dialog = new Dialog(getContext());
 
-                yesAlertBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        SignInFragment signInFragment = new SignInFragment();
-                        getParentFragmentManager().beginTransaction().replace(R.id.signin_singup_containerview,signInFragment).commit();
-                        dialog.dismiss();
+                    dialog.setContentView(R.layout.sucess_layout);
 
-                    }
-                });
+                    dialog.setCancelable(false);
 
-                dialog.show();
+                    yesAlertBtn = dialog.findViewById(R.id.alertYesBtn);
+
+                    yesAlertBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SignInFragment signInFragment = new SignInFragment();
+                            getParentFragmentManager().beginTransaction().replace(R.id.signin_singup_containerview,signInFragment).commit();
+                            dialog.dismiss();
+
+                        }
+                    });
+
+                    dialog.show();
+                }
+
+
 
             }
         });

@@ -1,6 +1,8 @@
 package com.example.moviesapp.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -19,11 +21,13 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.moviesapp.Adapters.FavouriteRecyclerViewAdapter;
 import com.example.moviesapp.R;
+import com.example.moviesapp.activities.HomeScreen;
 import com.example.moviesapp.dao.DatabaseHelper;
 import com.example.moviesapp.entities.FavouriteDetails;
 import com.example.moviesapp.models.MovieDetailsPojo;
@@ -38,9 +42,6 @@ public class FravouriteFragment extends Fragment {
 
     RecyclerView favRecyclerView;
 
-    MovieDetailsPojo movieDetailsPojo;
-
-    ArrayList<MovieDetailsPojo> favourites;
 
     List<FavouriteDetails> favouriteDetails;
 
@@ -50,8 +51,26 @@ public class FravouriteFragment extends Fragment {
 
     FavouriteRecyclerViewAdapter favouriteRecyclerViewAdapter;
 
-    public void updateData(ArrayList<MovieDetailsPojo> favourites) {
-        this.favourites = favourites;
+    DatabaseHelper databaseHelper;
+
+    SharedPreferences sharedPreferences;
+
+    Button yesAlertBtn;
+
+
+
+    public void receiveDataFromParent() {
+        // Process the received data in the child Fragment
+        int userId = sharedPreferences.getInt("username",0);
+        favouriteDetails = databaseHelper.favouriteDetailsDao().getAllFavourites(userId);
+            favouriteRecyclerViewAdapter = new FavouriteRecyclerViewAdapter((ArrayList<FavouriteDetails>) favouriteDetails, getContext());
+            favRecyclerView.setAdapter(favouriteRecyclerViewAdapter);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+            favRecyclerView.setLayoutManager(linearLayoutManager);
+
+
+
     }
 
     @Override
@@ -66,55 +85,61 @@ public class FravouriteFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.view = view;
-        DatabaseHelper databaseHelper = DatabaseHelper.getDB(getContext());
+
+        loadFragment();
+
+
+
+
+
+    }
+
+    public void  loadFragment(){
+        databaseHelper = DatabaseHelper.getDB(getContext());
 
         favRecyclerView = view.findViewById(R.id.favRecyclerView);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
 
         int userId = sharedPreferences.getInt("username",0);
-
         favouriteDetails = databaseHelper.favouriteDetailsDao().getAllFavourites(userId);
-
         favouriteRecyclerViewAdapter = new FavouriteRecyclerViewAdapter((ArrayList<FavouriteDetails>) favouriteDetails, getContext());
         favRecyclerView.setAdapter(favouriteRecyclerViewAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         favRecyclerView.setLayoutManager(linearLayoutManager);
-
-
-
-        if(favourites != null){
-            favouriteRecyclerViewAdapter.notifyDataSetChanged();
-        }
-
-
     }
-
     @Override
     public void onResume() {
         super.onResume();
-        if(favouriteDetails != null){
-            favouriteRecyclerViewAdapter.notifyDataSetChanged();
+
+        checkConnection();
+    }
+
+    public void checkConnection(){
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        Dialog dialog = new Dialog(getContext());
+
+        dialog.setContentView(R.layout.error_layout);
+
+        dialog.setCancelable(false);
+
+        yesAlertBtn = dialog.findViewById(R.id.alertYesBtn);
+
+        yesAlertBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment();
+                dialog.dismiss();
+
+            }
+        });
+
+        if (networkInfo == null) {
+            dialog.show();
         }
-        favouriteRecyclerViewAdapter.notifyDataSetChanged();
-
-        ConnectivityManager cm = (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo nInfo = cm.getActiveNetworkInfo();
-
-        if ((nInfo != null) && nInfo.isAvailable() && nInfo.isConnected()){
-
-        }
-        else{
-            Snackbar snackbar = Snackbar.make(view, "No Internet Connection", Snackbar.LENGTH_LONG);
-            View v = snackbar.getView();
-            snackbar.setBackgroundTint(Color.BLACK);
-            TextView textView = new TextView(v.getContext());
-            textView.setTextColor(Color.WHITE);
-            snackbar.show();
-        }
-
-
 
     }
 }

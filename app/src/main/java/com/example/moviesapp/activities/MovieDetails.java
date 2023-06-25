@@ -127,11 +127,7 @@ public class MovieDetails extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        if(movieDetailsPojo.getOriginalTitleText() != null && moviesMap.containsKey(movieDetailsPojo.getOriginalTitleText().getText())){
-//            addToFavBtn.setText("Added to favourties!");
-//            addToFavBtn.setClickable(false);
-//
-//        }
+
         if(movieDetailsPojo.getOriginalTitleText() != null) {
             int userId = sharedPreferences.getInt("username",0);
             List<FavouriteDetails> favouriteDetails = databaseHelper.favouriteDetailsDao().checkFavourite(movieDetailsPojo.getOriginalTitleText().getText());

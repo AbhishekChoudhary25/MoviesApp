@@ -29,10 +29,7 @@ public class FavouriteRecyclerViewAdapter extends RecyclerView.Adapter<Favourite
 
     Context context;
 
-//    public FavouriteRecyclerViewAdapter(ArrayList<MovieDetailsPojo> MovieDetailsPojo, Context context){
-//        this.movieDetailsPojo = MovieDetailsPojo;
-//        this.context = context;
-//    }
+
 
     public FavouriteRecyclerViewAdapter(ArrayList<FavouriteDetails> favouriteDetails, Context context){
         this.favouriteDetails = favouriteDetails;
@@ -50,39 +47,20 @@ public class FavouriteRecyclerViewAdapter extends RecyclerView.Adapter<Favourite
     @Override
     public void onBindViewHolder(@NonNull FavouriteRecyclerViewAdapter.ViewHolder holder,int position) {
 
-//        if(movieDetailsPojo.get(position).getPrimaryImage() != null){
-//            Picasso.get().load(movieDetailsPojo.get(position).getPrimaryImage().getUrl()).resize(200,300).into(holder.favImage);
-//        }
-//        else{
-//            Picasso.get().load("https://marketplace.canva.com/EAE_E8rjFrI/1/0/1131w/canva-minimal-mystery-of-forest-movie-poster-ggHwd_WiPcI.jpg").resize(200,300).into(holder.favImage);
-//        }
-//        holder.favTextView.setText(movieDetailsPojo.get(position).getOriginalTitleText().getText());
-//
-//        holder.deleteView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                HashMap<String, Boolean> map = MoviesAppUtil.moviesMap;
-//                map.remove(movieDetailsPojo.get(position).getOriginalTitleText().getText());
-//
-//                movieDetailsPojo.remove(position);
-//                notifyDataSetChanged();
-//            }
-//        });
 
         if(favouriteDetails.get(position).getFavouriteImageUrl() != null){
-            Picasso.get().load(favouriteDetails.get(position).getFavouriteImageUrl()).resize(200,300).into(holder.favImage);
-        }
-        else{
-            Picasso.get().load("https://marketplace.canva.com/EAE_E8rjFrI/1/0/1131w/canva-minimal-mystery-of-forest-movie-poster-ggHwd_WiPcI.jpg").resize(200,300).into(holder.favImage);
+            if(favouriteDetails.get(position).getFavouriteImageUrl().equals("default")){
+                Picasso.get().load("https://marketplace.canva.com/EAE_E8rjFrI/1/0/1131w/canva-minimal-mystery-of-forest-movie-poster-ggHwd_WiPcI.jpg").resize(200,300).into(holder.favImage);
+            }
+            else{
+                Picasso.get().load(favouriteDetails.get(position).getFavouriteImageUrl()).resize(200,300).into(holder.favImage);
+            }
         }
         holder.favTextView.setText(favouriteDetails.get(position).getFavouriteName());
 
         holder.deleteView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                HashMap<String, Boolean> map = MoviesAppUtil.moviesMap;
-//                map.remove(movieDetailsPojo.get(position).getOriginalTitleText().getText());
-
                 DatabaseHelper databaseHelper = DatabaseHelper.getDB(context);
                 databaseHelper.favouriteDetailsDao().deleteFavourite(favouriteDetails.get(position));
                 favouriteDetails.remove(position);

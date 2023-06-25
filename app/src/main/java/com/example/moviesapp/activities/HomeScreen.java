@@ -37,7 +37,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeScreen extends AppCompatActivity {
+public class HomeScreen extends AppCompatActivity{
 
     TabLayout tabLayout;
 
@@ -49,8 +49,6 @@ public class HomeScreen extends AppCompatActivity {
 
     private static final int REQUEST_CODE_CHILD_ACTIVITY = 1;
 
-    ArrayList<MovieDetailsPojo> favourites;
-    MovieDetailsPojo movieDetailsPojo;
 
     NetworkReciever networkChangeReceiver;
     List<Fragment> fragments;
@@ -59,10 +57,9 @@ public class HomeScreen extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHILD_ACTIVITY) {
             if (resultCode == RESULT_OK) {
-                movieDetailsPojo = (MovieDetailsPojo) data.getSerializableExtra("card");
-                favourites.add(movieDetailsPojo);
 
-                sendDataToFragment(fragments,favourites);
+                FravouriteFragment fragment = (FravouriteFragment)fragments.get(1);
+                fragment.receiveDataFromParent();
 
             } else if (resultCode == RESULT_CANCELED) {
                 System.out.println("Result Cancelled");
@@ -89,7 +86,6 @@ public class HomeScreen extends AppCompatActivity {
 
         getWindow().setStatusBarColor(getResources().getColor(R.color.main_colour_theme));
 
-        favourites = new ArrayList<>();
 
 
         fragments = new ArrayList<>();
@@ -124,16 +120,10 @@ public class HomeScreen extends AppCompatActivity {
 
     }
 
-    private void sendDataToFragment(List<Fragment> fragments,ArrayList<MovieDetailsPojo> favourites) {
-            FravouriteFragment fragment = (FravouriteFragment) fragments.get(1);
-            fragment.updateData(favourites);
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
-
-
 
 }

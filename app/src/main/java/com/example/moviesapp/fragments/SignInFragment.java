@@ -101,16 +101,6 @@ public class SignInFragment extends Fragment {
                 Boolean checkForEmailError =  emailTextFieldLayout.getError() == null;
                 Boolean checkForPasswordError = passwordTextFieldLayout.getError() == null;
 
-//                if(checkForPasswordError&& checkForEmailError  && emailEditText.getText().toString().equals("abhishek.choudhary@techigai.io") && passwordEditText.getText().toString().equals("Testing@1234")){
-//                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
-//
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    editor.putBoolean("flag", true);
-//                    editor.apply();
-//
-//                    startActivity(new Intent(getActivity(), HomeScreen.class));
-//                }
-
 
 
                 if(userDetails == null){

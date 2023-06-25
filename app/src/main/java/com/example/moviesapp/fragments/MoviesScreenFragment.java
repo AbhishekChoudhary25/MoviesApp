@@ -3,23 +3,30 @@ package com.example.moviesapp.fragments;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.example.moviesapp.Adapters.MovieRowRecyclerViewAdapter;
 import com.example.moviesapp.Api.RetrofitClient;
 import com.example.moviesapp.R;
+import com.example.moviesapp.activities.HomeScreen;
 import com.example.moviesapp.models.MovieDetailsPojo;
 import com.example.moviesapp.models.MoviesRowRecyclerViewPojo;
 import com.example.moviesapp.models.MovieResultsPojo;
@@ -45,12 +52,25 @@ public class MoviesScreenFragment extends Fragment {
 
     MovieDetailsPojo movieDetailsPojo;
 
+    Button yesAlertBtn;
+
 
     public MoviesScreenFragment() {
         // Required empty public constructor
         retrofitClient = new RetrofitClient();
     }
 
+    ArrayList<MovieDetailsPojo> upcomingMovies;
+
+    ArrayList<MovieDetailsPojo> comedyMovies;
+
+    ArrayList<MovieDetailsPojo> actionMovies;
+
+    ArrayList<MovieDetailsPojo> dramaMovies;
+
+    MovieRowRecyclerViewAdapter movieRowRecyclerViewAdapter;
+
+    View view;
 
 
     @Override
@@ -70,6 +90,17 @@ public class MoviesScreenFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        this.view = view;
+        loadFragment();
+
+
+
+    }
+
+    public void loadFragment(){
+
+        checkConnection();
 
         parentRecyclerView = view.findViewById(R.id.parentRecyclerView);
 
@@ -100,17 +131,16 @@ public class MoviesScreenFragment extends Fragment {
         parentRecyclerView.setAdapter(movieRowRecyclerViewAdapter);
         movieRowRecyclerViewAdapter.notifyDataSetChanged();
 
-
-        upComingMovies(upcomingMovies,movieRowRecyclerViewAdapter);
-        getComedyMovies(comedyMovies, movieRowRecyclerViewAdapter);
-        getActionMovies(actionMovies,movieRowRecyclerViewAdapter);
-        getDramaMovies(dramaMovies,movieRowRecyclerViewAdapter);
-
-        System.out.println(UserAccessor.username + "jnjn");
-
-
+        try{
+            upComingMovies(upcomingMovies,movieRowRecyclerViewAdapter);
+            getComedyMovies(comedyMovies, movieRowRecyclerViewAdapter);
+            getActionMovies(actionMovies,movieRowRecyclerViewAdapter);
+            getDramaMovies(dramaMovies,movieRowRecyclerViewAdapter);
+        }
+        catch (Exception e){
 
 
+        }
     }
 
     void getDramaMovies(List<MovieDetailsPojo> dramaMovies,MovieRowRecyclerViewAdapter movieRowRecyclerViewAdapter){
@@ -207,4 +237,37 @@ public class MoviesScreenFragment extends Fragment {
     }
 
 
+     public void checkConnection(){
+         ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+         Dialog dialog = new Dialog(getContext());
+
+         dialog.setContentView(R.layout.error_layout);
+
+         dialog.setCancelable(false);
+
+         yesAlertBtn = dialog.findViewById(R.id.alertYesBtn);
+
+         yesAlertBtn.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 loadFragment();
+                 dialog.dismiss();
+
+             }
+         });
+
+         if (networkInfo == null) {
+             dialog.show();
+         }
+
+     }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        checkConnection();
+
+    }
 }
