@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
@@ -37,6 +38,8 @@ public class MovieDetails extends AppCompatActivity {
 
     Button addToFavBtn;
 
+    Button deleteFavBtn;
+
     MovieDetailsPojo movieDetailsPojo;
 
     HashMap<String, Boolean> moviesMap;
@@ -44,6 +47,8 @@ public class MovieDetails extends AppCompatActivity {
     DatabaseHelper databaseHelper;
 
     SharedPreferences sharedPreferences;
+
+    boolean isPresent = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,8 @@ public class MovieDetails extends AppCompatActivity {
 
         addToFavBtn = findViewById(R.id.addToFavBtn);
 
+        deleteFavBtn = findViewById(R.id.deleteFavbtn);
+
         movieImage = findViewById(R.id.movieImage);
 
         MovieDetailsPojo movieDetailsPojo = (MovieDetailsPojo) getIntent().getSerializableExtra("movieDetails");
@@ -86,29 +93,40 @@ public class MovieDetails extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
 
+        int userId = sharedPreferences.getInt("username",0);
 
         addToFavBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                    if(movieDetailsPojo.getPrimaryImage() != null) {
+                        databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), movieDetailsPojo.getPrimaryImage().getUrl()));
+                    }
+                    else{
+                        databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), "default"));
+                    }
+
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("card", movieDetailsPojo);
+                    setResult(RESULT_OK, resultIntent);
+
+                    addToFavBtn.setVisibility(View.GONE);
+                deleteFavBtn.setVisibility(View.VISIBLE);
+                }
+        });
+
+        deleteFavBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                databaseHelper.favouriteDetailsDao().deleteFavouriteByUserAndFavName(userId, movieDetailsPojo.getOriginalTitleText().getText());
+                deleteFavBtn.setVisibility(View.GONE);
+                addToFavBtn.setVisibility(View.VISIBLE);
+
                 Intent resultIntent = new Intent();
-                MoviesAppUtil.moviesMap.put(movieDetailsPojo.getOriginalTitleText().getText(), true);
                 resultIntent.putExtra("card", movieDetailsPojo);
                 setResult(RESULT_OK, resultIntent);
-                addToFavBtn.setText("Added to favourites!");
-                addToFavBtn.setClickable(false);
-
-
-
-                 int userId = sharedPreferences.getInt("username",0);
-
-                 if(movieDetailsPojo.getPrimaryImage() != null) {
-                     databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), movieDetailsPojo.getPrimaryImage().getUrl()));
-                 }
-                 else{
-                     databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), "default"));
-                 }
             }
         });
+
 
 
 
@@ -125,34 +143,34 @@ public class MovieDetails extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
-        if(movieDetailsPojo.getOriginalTitleText() != null) {
-            int userId = sharedPreferences.getInt("username",0);
+        if (movieDetailsPojo.getOriginalTitleText() != null) {
+            int userId = sharedPreferences.getInt("username", 0);
             List<FavouriteDetails> favouriteDetails = databaseHelper.favouriteDetailsDao().checkFavourite(movieDetailsPojo.getOriginalTitleText().getText());
 
             ArrayList<FavouriteDetails> arrayList = (ArrayList<FavouriteDetails>) favouriteDetails;
 
-            boolean isPresent = false;
-
-            for(int i = 0; i < arrayList.size(); i++){
-                if(arrayList.get(i).getFavouriteName().equals(movieDetailsPojo.getOriginalTitleText().getText()) && arrayList.get(i).getUserId() == userId){
+            for (int i = 0; i < arrayList.size(); i++) {
+                if (arrayList.get(i).getFavouriteName().equals(movieDetailsPojo.getOriginalTitleText().getText()) && arrayList.get(i).getUserId() == userId) {
                     isPresent = true;
                     break;
                 }
 
             }
 
-            if (favouriteDetails!= null && isPresent){
-                addToFavBtn.setText("Added to favourties!");
-                addToFavBtn.setClickable(false);
+            if (isPresent) {
+                addToFavBtn.setVisibility(View.GONE);
+            } else {
+                deleteFavBtn.setVisibility(View.GONE);
             }
         }
-        else{
-            addToFavBtn.setText("Add to favourite");
-        }
+
     }
-
-
 }

@@ -22,6 +22,9 @@ public interface FavouriteDetailsDao {
     @Delete
     void deleteFavourite(FavouriteDetails favouriteDetails);
 
+    @Query("DELETE FROM favourites WHERE user_id = :userId and favourite_name = :favouriteName")
+    void deleteFavouriteByUserAndFavName(int userId,String favouriteName);
+
     @Query("SELECT * FROM favourites WHERE favourite_name = :favouriteName")
     List<FavouriteDetails> checkFavourite(String favouriteName);
 
