@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.example.moviesapp.entities.FavouriteDetails;
 import com.example.moviesapp.entities.UserDetails;
 
-@Database(entities = {UserDetails.class, FavouriteDetails.class}, exportSchema = false,version = 2)
+@Database(entities = {UserDetails.class, FavouriteDetails.class}, exportSchema = false,version = 3)
 public abstract class DatabaseHelper extends RoomDatabase {
     private static final String DB_NAME = "expensedb";
     private static DatabaseHelper instance;

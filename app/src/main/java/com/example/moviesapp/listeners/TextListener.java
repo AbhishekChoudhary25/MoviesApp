@@ -51,10 +51,7 @@ public class TextListener implements TextWatcher {
                 textInputLayout.setError("");
             }
 
-            if(!password.getText().toString().equals("")){
-                passwordTextFieldLayout.setError("");
-            }
-            else if(!validPassword(password.getText().toString())){
+            if(!validPassword(password.getText().toString())){
                 passwordTextFieldLayout.setError("Please enter a valid password");
             }
             else{
@@ -82,7 +79,7 @@ public class TextListener implements TextWatcher {
     }
 
     private boolean validPassword(String password){
-        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+        String regex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
         Pattern pattern = Pattern.compile(regex);
 
         Matcher matcher = pattern.matcher(password);

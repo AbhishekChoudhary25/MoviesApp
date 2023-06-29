@@ -16,6 +16,16 @@ public class UserDetails {
     @ColumnInfo(name = "password")
     private String password;
 
+    @ColumnInfo(name = "age")
+    private int age;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
     public int getUserId() {
         return userId;
@@ -52,18 +62,20 @@ public class UserDetails {
     @ColumnInfo(name = "gender")
     private String gender;
 
-    public UserDetails(int userId, String username, String password, String gender) {
+    public UserDetails(int userId, String username, String password, String gender,int age) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.gender = gender;
+        this.age = age;
     }
 
     @Ignore
-    public UserDetails(String username, String password, String gender) {
+    public UserDetails(String username, String password, String gender,int age) {
 
         this.username = username;
         this.password = password;
         this.gender = gender;
+        this.age = age;
     }
 }

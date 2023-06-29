@@ -14,12 +14,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.moviesapp.R;
 import com.example.moviesapp.activities.MainActivity;
 import com.example.moviesapp.dao.DatabaseHelper;
 import com.example.moviesapp.entities.UserDetails;
 import com.example.moviesapp.listeners.TextListener;
+import com.example.moviesapp.listeners.UtilTextListener;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class SignUpFragment extends Fragment {
@@ -38,11 +42,18 @@ public class SignUpFragment extends Fragment {
 
     Button yesAlertBtn;
 
+    SeekBar seekBar;
+
+    TextView ageText;
+
+    EditText confirmPassword;
+
+    TextInputLayout confirmTextFieldLayout;
+
+
     public SignUpFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,18 +80,50 @@ public class SignUpFragment extends Fragment {
 
         genderRadioGroup = view.findViewById(R.id.genderRadioGroup);
 
+        seekBar = view.findViewById(R.id.ageSeekbar);
+
+        ageText= view.findViewById(R.id.ageText);
+
+        confirmPassword = view.findViewById(R.id.confirmPassword);
+
+        confirmTextFieldLayout = view.findViewById(R.id.confirmTextFieldLayout);
+
         emailEditText.addTextChangedListener(new TextListener(emailEditText,passwordEditText,emailTextFieldLayout,passwordTextFieldLayout ,getContext()));
 
         passwordEditText.addTextChangedListener(new TextListener(emailEditText,passwordEditText,emailTextFieldLayout,passwordTextFieldLayout ,getContext()));
+
+        confirmPassword.addTextChangedListener(new UtilTextListener(confirmPassword, confirmTextFieldLayout, getContext()));
+
+
+        seekBar.setProgress(18);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                ageText.setText(progress + " years");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(emailEditText.getText().toString().equals("")){
-                    emailTextFieldLayout.setError("Email Field Cannot be null!");
+                    emailTextFieldLayout.setError("Email Field Cannot be empty!");
                 }
                 else if(passwordEditText.getText().toString().equals("")){
-                    passwordTextFieldLayout.setError("Password field cannot be null!");
+                    passwordTextFieldLayout.setError("Password field cannot be empty!");
+                }
+                else if(confirmPassword.getText().toString().equals("")){
+                    confirmTextFieldLayout.setError("Cannot be empty!");
                 }
 
                 UserDetails user = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString());
@@ -89,9 +132,17 @@ public class SignUpFragment extends Fragment {
                     emailTextFieldLayout.setError("User already exists!");
                 }
 
+                String selectedGender = "";
 
-                if(emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null){
-                    databaseHelper.userDetailsDAO().adduser(new UserDetails(emailEditText.getText().toString(),passwordEditText.getText().toString(),"male"));
+                if(genderRadioGroup.getCheckedRadioButtonId() == R.id.radioMale){
+                    selectedGender = "Male";
+                }
+                else{
+                    selectedGender = "Female";
+                }
+
+                if(emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null && passwordEditText.getText().toString().equals(confirmPassword.getText().toString())){
+                    databaseHelper.userDetailsDAO().adduser(new UserDetails(emailEditText.getText().toString(),passwordEditText.getText().toString(),selectedGender,seekBar.getProgress()));
 
                     Dialog dialog = new Dialog(getContext());
 
@@ -112,6 +163,12 @@ public class SignUpFragment extends Fragment {
                     });
 
                     dialog.show();
+                }
+                else{
+                    if(confirmTextFieldLayout.getError() == null){
+                        Toast.makeText(getContext(), "Password Did not match!", Toast.LENGTH_LONG).show();
+                    }
+
                 }
 
 

@@ -31,6 +31,10 @@ public class ProfileFragment extends Fragment {
 
     TextView email;
 
+    TextView age;
+
+    TextView gender;
+
     Button yesAlertBtn;
 
     Button noAlertBtn;
@@ -58,13 +62,21 @@ public class ProfileFragment extends Fragment {
 
         email = view.findViewById(R.id.email);
 
+        age = view.findViewById(R.id.age);
+
+        gender = view.findViewById(R.id.gender);
+
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
 
         int userId = sharedPreferences.getInt("username",0);
 
         UserDetails userDetails = databaseHelper.userDetailsDAO().findUserWithId(userId);
 
-        email.setText(userDetails.getUsername());
+        email.setText("Email :    " + userDetails.getUsername());
+
+        age.setText("Age :    " +userDetails.getAge() + "");
+
+        gender.setText("Gender :    " + userDetails.getGender());
 
         profileImage = view.findViewById(R.id.profileImage);
 

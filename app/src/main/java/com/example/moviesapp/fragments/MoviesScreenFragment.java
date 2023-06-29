@@ -267,7 +267,12 @@ public class MoviesScreenFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        checkConnection();
+    }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        checkConnection();
     }
 }

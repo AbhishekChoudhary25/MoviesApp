@@ -8,30 +8,9 @@
     android:layout_height="match_parent"
     tools:context=".fragments.SignInFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/fjord_one"
-        android:gravity="center"
-        android:text="Hi, Welcome Back!"
-        android:textColor="@color/white"
-        android:textSize="35sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="75dp"
-        android:background="@drawable/signupscreenshape"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,141 +19,173 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:src="@drawable/tv"/>
-
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10sp"
-
-                    android:fontFamily="@font/itim"
-                    android:text="Email" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/emailTextFieldLayout"
-                        app:startIconDrawable="@drawable/email"
-                        app:startIconContentDescription="Enter your email"
-                        android:layout_width="match_parent"
-                        app:errorEnabled="true"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_height="wrap_content"
-                    >
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/emailTextField"
-                        android:layout_width="match_parent"
-                        android:inputType="textNoSuggestions"
-                        android:hint="Enter your email"
-                        android:maxLines="1"
-                        android:fontFamily="@font/itim"
-                        android:layout_height="wrap_content"
-                    />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10sp"
-
-                    android:fontFamily="@font/itim"
-                    android:text="Password" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/passwordTextFieldLayout"
-                    app:startIconDrawable="@drawable/password"
-                    app:startIconContentDescription="Enter your email"
-                    android:layout_width="match_parent"
-                    app:errorEnabled="true"
-                    android:inputType="textNoSuggestions"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:endIconMode="password_toggle"
-                    android:layout_height="wrap_content"
-                    >
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/passwordEditText"
-                        android:layout_width="match_parent"
-                        android:inputType="textPassword"
-                        android:maxLines="1"
-                        android:hint="Enter your password"
-                        android:fontFamily="@font/itim"
-                        android:layout_height="wrap_content"
-                        />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </LinearLayout>
-
-<!--            <Button-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="30dp"-->
-<!--                android:fontFamily="@font/itim"-->
-<!--                android:backgroundTint="@color/main_colour_theme"-->
-<!--                android:text="Sign in" />-->
-
-            <Button
-                android:id="@+id/signInBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/itim"
-                app:backgroundTint="@color/main_colour_theme"
-                app:elevation ="10dp"
+                android:fontFamily="@font/fjord_one"
+                android:gravity="center"
+                android:text="Hi, Welcome Back!"
                 android:textColor="@color/white"
-                android:text="Sign in"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                />
+                android:textSize="35sp"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="150dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="75dp"
+                android:background="@drawable/signupscreenshape"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/itim"
-                    android:text="Dont have an account?" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="50dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/signUpTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/itim"
-                    android:textStyle="bold"
-                    android:textColor="#36454F"
-                    android:text=" Sign Up" />
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/tv" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10sp"
+
+                            android:fontFamily="@font/itim"
+                            android:text="Email" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/emailTextFieldLayout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorEnabled="true"
+                            app:startIconContentDescription="Enter your email"
+                            app:startIconDrawable="@drawable/email">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/emailTextField"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/itim"
+                                android:hint="Enter your email"
+                                android:inputType="textNoSuggestions"
+                                android:maxLines="1" />
+
+                            <ScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                            </ScrollView>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10sp"
+
+                            android:fontFamily="@font/itim"
+                            android:text="Password" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/passwordTextFieldLayout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textNoSuggestions"
+                            app:endIconMode="password_toggle"
+                            app:errorEnabled="true"
+                            app:startIconContentDescription="Enter your email"
+                            app:startIconDrawable="@drawable/password">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/passwordEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/itim"
+                                android:hint="Enter your password"
+                                android:inputType="textPassword"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </LinearLayout>
+                    <Button
+                        android:id="@+id/signInBtn"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/itim"
+                        android:text="Sign in"
+                        android:textColor="@color/white"
+                        app:backgroundTint="@color/main_colour_theme"
+                        app:elevation="10dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/itim"
+                            android:text="Dont have an account?" />
+
+                        <TextView
+                            android:id="@+id/signUpTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/itim"
+                            android:text=" Sign Up"
+                            android:textColor="#36454F"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
             </LinearLayout>
         </LinearLayout>
 
+    </ScrollView>
 
-    </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

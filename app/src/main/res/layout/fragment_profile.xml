@@ -48,16 +48,28 @@
                 android:id="@+id/email"
                 android:fontFamily="@font/itim"
                 android:layout_margin="5dp"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Email :  abhishek.chouhdary@techigai.io" />
 
             <TextView
+                android:id="@+id/age"
                 android:fontFamily="@font/itim"
                 android:layout_margin="5dp"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Age:     22" />
+
+            <TextView
+                android:id="@+id/gender"
+                android:fontFamily="@font/itim"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Gender: Male" />
 
         </LinearLayout>
 
