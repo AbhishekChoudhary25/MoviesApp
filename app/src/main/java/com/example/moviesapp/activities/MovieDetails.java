@@ -173,4 +173,8 @@ public class MovieDetails extends AppCompatActivity {
         }
 
     }
+
+    public  void backArrow(View view){
+        onBackPressed();
+    }
 }

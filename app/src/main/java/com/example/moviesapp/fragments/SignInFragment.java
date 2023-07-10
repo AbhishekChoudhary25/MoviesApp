@@ -83,10 +83,10 @@ public class SignInFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(emailEditText.getText().toString().equals("")){
-                    emailTextFieldLayout.setError("Email Field Cannot be null!");
+                    emailTextFieldLayout.setError("Email Field Cannot be empty!");
                 }
-                else if(passwordEditText.getText().toString().equals("")){
-                    passwordTextFieldLayout.setError("Password field cannot be null!");
+                if(passwordEditText.getText().toString().equals("")){
+                    passwordTextFieldLayout.setError("Password field cannot be empty!");
                 }
 
 

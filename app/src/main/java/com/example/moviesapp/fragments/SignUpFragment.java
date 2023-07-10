@@ -119,18 +119,21 @@ public class SignUpFragment extends Fragment {
                 if(emailEditText.getText().toString().equals("")){
                     emailTextFieldLayout.setError("Email Field Cannot be empty!");
                 }
-                else if(passwordEditText.getText().toString().equals("")){
+                if(passwordEditText.getText().toString().equals("")){
                     passwordTextFieldLayout.setError("Password field cannot be empty!");
                 }
-                else if(confirmPassword.getText().toString().equals("")){
+                if(confirmPassword.getText().toString().equals("")){
                     confirmTextFieldLayout.setError("Cannot be empty!");
                 }
 
-                UserDetails user = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString());
+                if(emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null){
+                    UserDetails user = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString());
 
-                if(user != null){
-                    emailTextFieldLayout.setError("User already exists!");
+                    if(user != null){
+                        emailTextFieldLayout.setError("User already exists!");
+                    }
                 }
+
 
                 String selectedGender = "";
 
@@ -165,7 +168,7 @@ public class SignUpFragment extends Fragment {
                     dialog.show();
                 }
                 else{
-                    if(confirmTextFieldLayout.getError() == null){
+                    if(confirmTextFieldLayout.getError() == null && emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null){
                         Toast.makeText(getContext(), "Password Did not match!", Toast.LENGTH_LONG).show();
                     }
 
