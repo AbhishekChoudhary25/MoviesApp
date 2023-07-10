@@ -33,7 +33,6 @@
             android:name=".activities.MovieDetails"
             android:exported="false" />
         <activity
-            android:configChanges="screenSize|orientation"
             android:name=".activities.HomeScreen"
             android:exported="false"
             android:launchMode="singleTask" />

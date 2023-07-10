@@ -8,7 +8,7 @@ import android.net.NetworkRequest;
 
 import androidx.annotation.NonNull;
 
-public class NetworkCallBack extends ConnectivityManager.NetworkCallback {
+public abstract class NetworkCallBack extends ConnectivityManager.NetworkCallback {
     ConnectivityManager cm;
     NetworkRequest networkRequest;
 
@@ -22,22 +22,24 @@ public class NetworkCallBack extends ConnectivityManager.NetworkCallback {
     @Override
     public void onAvailable(@NonNull Network network) {
         super.onAvailable(network);
-
+        onSuccess();
     }
 
     @Override
     public void onUnavailable() {
         super.onUnavailable();
-
+        onFailure("Something went wrong!");
     }
 
     @Override
     public void onLost(@NonNull Network network) {
         super.onLost(network);
+        onFailure("No Internet Connection!");
     }
 
+    public abstract void onSuccess();
 
-
+    public abstract void onFailure(String message);
 
     public void register(NetworkCallBack networkCallbackAbstract){
         cm.registerNetworkCallback(this.networkRequest,networkCallbackAbstract);

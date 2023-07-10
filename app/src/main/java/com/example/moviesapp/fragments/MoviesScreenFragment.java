@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.moviesapp.Adapters.MovieRowRecyclerViewAdapter;
 import com.example.moviesapp.Api.RetrofitClient;
@@ -30,7 +31,7 @@ import com.example.moviesapp.activities.HomeScreen;
 import com.example.moviesapp.models.MovieDetailsPojo;
 import com.example.moviesapp.models.MoviesRowRecyclerViewPojo;
 import com.example.moviesapp.models.MovieResultsPojo;
-import com.example.moviesapp.util.UserAccessor;
+import com.example.moviesapp.util.NetworkCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,8 @@ public class MoviesScreenFragment extends Fragment {
     RetrofitClient retrofitClient;
 
     ProgressBar progressBar;
+
+    NetworkCallBack networkCallback;
 
     private static final int REQUEST_CODE_CHILD_ACTIVITY = 1;
 
@@ -93,6 +96,20 @@ public class MoviesScreenFragment extends Fragment {
 
         this.view = view;
         loadFragment();
+
+        networkCallback = new NetworkCallBack(getActivity()) {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(getContext(), "Back Online!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        networkCallback.register(networkCallback);
 
 
 
@@ -267,6 +284,12 @@ public class MoviesScreenFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        networkCallback.unRegister(networkCallback);
     }
 
     @Override

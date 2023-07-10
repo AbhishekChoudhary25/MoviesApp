@@ -124,14 +124,14 @@ public class HomeScreen extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        registerNetworkCallback();
+//        registerNetworkCallback();
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterNetworkCallback();
+//        unregisterNetworkCallback();
     }
 
     @Override
