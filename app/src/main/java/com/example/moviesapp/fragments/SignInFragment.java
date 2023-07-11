@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,8 @@ import com.example.moviesapp.util.UserAccessor;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class SignInFragment extends Fragment {
@@ -70,10 +74,46 @@ public class SignInFragment extends Fragment {
 
         passwordTextFieldLayout = view.findViewById(R.id.passwordTextFieldLayout);
 
+        emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if(!validEmail(emailEditText.getText().toString())){
+                    emailTextFieldLayout.setError("Enter Valid Email Address");
+                }
+                else{
+                    emailTextFieldLayout.setError("");
+                }
+            }
 
-        emailEditText.addTextChangedListener(new TextListener(emailEditText,passwordEditText,emailTextFieldLayout,passwordTextFieldLayout ,getContext()));
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-        passwordEditText.addTextChangedListener(new UtilTextListener(passwordEditText,passwordTextFieldLayout,getContext()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!passwordEditText.getText().toString().equals("")){
+                    passwordTextFieldLayout.setError("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         signUpTv = view.findViewById(R.id.signUpTv);
 
@@ -144,5 +184,16 @@ public class SignInFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
     }
 
+    private boolean validEmail(String email){
+        String regex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+
+        Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+
+
+    }
 
 }

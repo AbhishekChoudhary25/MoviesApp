@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,9 @@ import com.example.moviesapp.entities.UserDetails;
 import com.example.moviesapp.listeners.TextListener;
 import com.example.moviesapp.listeners.UtilTextListener;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignUpFragment extends Fragment {
 
@@ -88,11 +93,76 @@ public class SignUpFragment extends Fragment {
 
         confirmTextFieldLayout = view.findViewById(R.id.confirmTextFieldLayout);
 
-        emailEditText.addTextChangedListener(new TextListener(emailEditText,passwordEditText,emailTextFieldLayout,passwordTextFieldLayout ,getContext()));
+//        emailEditText.addTextChangedListener(new TextListener(emailEditText,passwordEditText,emailTextFieldLayout,passwordTextFieldLayout ,getContext()));
 
-        passwordEditText.addTextChangedListener(new TextListener(emailEditText,passwordEditText,emailTextFieldLayout,passwordTextFieldLayout ,getContext()));
+//        passwordEditText.addTextChangedListener(new TextListener(emailEditText,passwordEditText,emailTextFieldLayout,passwordTextFieldLayout ,getContext()));
 
-        confirmPassword.addTextChangedListener(new UtilTextListener(confirmPassword, confirmTextFieldLayout, getContext()));
+//        confirmPassword.addTextChangedListener(new UtilTextListener(confirmPassword, confirmTextFieldLayout, getContext()));
+
+        emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!validEmail(emailEditText.getText().toString())){
+                    emailTextFieldLayout.setError("Enter Valid Email Address");
+                }
+                else{
+                    emailTextFieldLayout.setError("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!validPassword(passwordEditText.getText().toString())){
+                    passwordTextFieldLayout.setError("Please enter a valid password");
+                }
+                else{
+                    passwordTextFieldLayout.setError("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        confirmPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!confirmPassword.getText().toString().equals("")){
+                    confirmTextFieldLayout.setError("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
 
 
         seekBar.setProgress(18);
@@ -178,8 +248,25 @@ public class SignUpFragment extends Fragment {
 
             }
         });
+    }
+    private boolean validEmail(String email){
+        String regex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+
+        Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
 
 
+    }
+
+    private boolean validPassword(String password){
+        String regex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
 
     }
 }
