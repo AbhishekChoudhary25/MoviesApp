@@ -215,7 +215,7 @@ public class SignUpFragment extends Fragment {
                 }
 
                 if(emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null && passwordEditText.getText().toString().equals(confirmPassword.getText().toString())){
-                    databaseHelper.userDetailsDAO().adduser(new UserDetails(emailEditText.getText().toString(),passwordEditText.getText().toString(),selectedGender,seekBar.getProgress()));
+                    databaseHelper.userDetailsDAO().adduser(new UserDetails(emailEditText.getText().toString().toLowerCase(),passwordEditText.getText().toString(),selectedGender,seekBar.getProgress()));
 
                     Dialog dialog = new Dialog(getContext());
 

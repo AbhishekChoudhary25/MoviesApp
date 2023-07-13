@@ -77,17 +77,17 @@ public class SignInFragment extends Fragment {
         emailEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(!validEmail(emailEditText.getText().toString())){
                     emailTextFieldLayout.setError("Enter Valid Email Address");
                 }
                 else{
                     emailTextFieldLayout.setError("");
                 }
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -131,7 +131,7 @@ public class SignInFragment extends Fragment {
 
 
                 if(!emailEditText.getText().toString().equals("")){
-                    UserDetails userDetails = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString());
+                    UserDetails userDetails = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString().toLowerCase());
 
                     if(userDetails == null){
                         emailTextFieldLayout.setError("Email Does not exist, Please sign up!");

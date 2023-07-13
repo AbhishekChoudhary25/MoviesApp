@@ -17,6 +17,7 @@
         tools:targetApi="33">
         <activity
             android:name=".activities.SplashActivity"
+            android:configChanges="screenSize|orientation"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
