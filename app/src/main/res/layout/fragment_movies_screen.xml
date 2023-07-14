@@ -9,21 +9,21 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorColor="#FFFFFF"
+        app:indicatorSize="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:indeterminate="true"
-        app:indicatorColor="#FFFFFF"
-        android:visibility="gone"
-        app:trackColor="@color/main_colour_theme"
-        app:indicatorSize="50dp"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:trackColor="@color/main_colour_theme" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:padding="5dp"
         android:id="@+id/parentRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

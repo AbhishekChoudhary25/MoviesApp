@@ -53,6 +53,8 @@ public class SignUpFragment extends Fragment {
 
     EditText confirmPassword;
 
+    TextView signInTv;
+
     TextInputLayout confirmTextFieldLayout;
 
 
@@ -92,6 +94,8 @@ public class SignUpFragment extends Fragment {
         confirmPassword = view.findViewById(R.id.confirmPassword);
 
         confirmTextFieldLayout = view.findViewById(R.id.confirmTextFieldLayout);
+
+        signInTv = view.findViewById(R.id.signInTv);
 
 //        emailEditText.addTextChangedListener(new TextListener(emailEditText,passwordEditText,emailTextFieldLayout,passwordTextFieldLayout ,getContext()));
 
@@ -196,7 +200,7 @@ public class SignUpFragment extends Fragment {
                     confirmTextFieldLayout.setError("Cannot be empty!");
                 }
 
-                if(emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null){
+                if(emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null && confirmPassword.getText() != null && passwordEditText.getText() != null && emailEditText.getText() != null&& passwordEditText.getText().toString().equals(confirmPassword.getText().toString())){
                     UserDetails user = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString());
 
                     if(user != null){
@@ -246,6 +250,14 @@ public class SignUpFragment extends Fragment {
 
 
 
+            }
+        });
+
+        signInTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SignInFragment signInFragment = new SignInFragment();
+                getParentFragmentManager().beginTransaction().replace(R.id.signin_singup_containerview,signInFragment).commit();
             }
         });
     }

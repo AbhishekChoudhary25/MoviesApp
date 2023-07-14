@@ -17,7 +17,7 @@
                 android:fontFamily="@font/fjord_one"
                 android:gravity="center"
                 android:text="Sign Up!"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="40dp"
                 android:textColor="@color/white"
                 android:textSize="35sp"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -228,6 +228,28 @@
                         android:backgroundTint="@color/main_colour_theme"
                         android:text="Sign Up" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/itim"
+                            android:text="Already have an account?" />
+
+                        <TextView
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:id="@+id/signInTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/itim"
+                            android:text=" Sign In!"
+                            android:textColor="#36454F"
+                            android:textStyle="bold" />
+                    </LinearLayout>
                 </LinearLayout>
 
 

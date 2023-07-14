@@ -130,7 +130,7 @@ public class SignInFragment extends Fragment {
                 }
 
 
-                if(!emailEditText.getText().toString().equals("")){
+                if(!emailEditText.getText().toString().equals("") && emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null){
                     UserDetails userDetails = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString().toLowerCase());
 
                     if(userDetails == null){
