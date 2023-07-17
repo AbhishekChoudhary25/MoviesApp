@@ -42,6 +42,7 @@
             android:configChanges="screenSize|orientation"
             android:name=".activities.MainActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustNothing"
             android:theme="@style/SplashTheme">
         </activity>
 
