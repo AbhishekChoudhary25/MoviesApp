@@ -27,10 +27,6 @@
         </activity>
         <activity
             android:configChanges="screenSize|orientation"
-            android:name=".activities.ErrorIntent"
-            android:exported="false" />
-        <activity
-            android:configChanges="screenSize|orientation"
             android:name=".activities.MovieDetails"
             android:exported="false" />
         <activity

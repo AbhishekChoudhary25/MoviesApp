@@ -51,9 +51,6 @@ public class MoviesScreenFragment extends Fragment {
 
     NetworkCallBack networkCallback;
 
-    private static final int REQUEST_CODE_CHILD_ACTIVITY = 1;
-
-    MovieDetailsPojo movieDetailsPojo;
 
     Button yesAlertBtn;
 

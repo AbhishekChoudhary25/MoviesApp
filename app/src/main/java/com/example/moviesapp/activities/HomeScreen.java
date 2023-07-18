@@ -175,4 +175,17 @@ public class HomeScreen extends AppCompatActivity{
 
     }
 
+    public void changeFragment(Fragment fragment,MovieDetailsPojo movieDetailsPojo){
+        Bundle movieDetailsBundle = new Bundle();
+        movieDetailsBundle.putSerializable("movie_det",movieDetailsPojo);
+        fragment.setArguments(movieDetailsBundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.moviesScreen,fragment)
+                .addToBackStack("view").commit();
+    }
+
+    public void changeInFavourites(){
+        FravouriteFragment fragment = (FravouriteFragment)fragments.get(1);
+        fragment.receiveDataFromParent();
+    }
+
 }

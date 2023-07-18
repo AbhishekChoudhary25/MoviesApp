@@ -12,7 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moviesapp.R;
+import com.example.moviesapp.activities.HomeScreen;
 import com.example.moviesapp.activities.MovieDetails;
+import com.example.moviesapp.fragments.MovieDetailsFragment;
+import com.example.moviesapp.fragments.SignUpFragment;
 import com.example.moviesapp.models.MovieDetailsPojo;
 import com.squareup.picasso.Picasso;
 
@@ -24,8 +27,6 @@ public class MovieCardRecyclerViewAdapter extends RecyclerView.Adapter<MovieCard
     Context context;
 
     Activity activity;
-
-    private static final int REQUEST_CODE_CHILD_ACTIVITY = 1;
 
     public MovieCardRecyclerViewAdapter(List<MovieDetailsPojo> movieDetailsPojo, Context context,Activity activity){
         this.context = context;
@@ -54,9 +55,13 @@ public class MovieCardRecyclerViewAdapter extends RecyclerView.Adapter<MovieCard
         titleImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), MovieDetails.class);
-                intent.putExtra("movieDetails",movieDetailsPojo.get(position));
-                activity.startActivityForResult(intent,REQUEST_CODE_CHILD_ACTIVITY);
+//                Intent intent = new Intent(v.getContext(), MovieDetails.class);
+//                intent.putExtra("movieDetails",movieDetailsPojo.get(position));
+//                activity.startActivityForResult(intent,REQUEST_CODE_CHILD_ACTIVITY);
+                MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment();
+                HomeScreen homeScreen = (HomeScreen)activity;
+                homeScreen.changeFragment(movieDetailsFragment,movieDetailsPojo.get(position));
+
             }
         });
 

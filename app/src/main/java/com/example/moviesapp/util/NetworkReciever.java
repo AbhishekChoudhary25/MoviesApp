@@ -7,10 +7,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.moviesapp.activities.ErrorIntent;
-
 public class NetworkReciever extends BroadcastReceiver {
     Activity activity;
 
@@ -29,7 +25,7 @@ public class NetworkReciever extends BroadcastReceiver {
                 activity.startActivity(restartIntent);
             }
         } else {
-            context.startActivity(new Intent(context, ErrorIntent.class));
+//            context.startActivity(new Intent(context, ErrorIntent.class));
         }
     }
 }

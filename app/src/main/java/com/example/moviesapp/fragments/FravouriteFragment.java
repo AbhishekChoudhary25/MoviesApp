@@ -1,5 +1,6 @@
 package com.example.moviesapp.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -61,6 +62,7 @@ public class FravouriteFragment extends Fragment {
 
     public void receiveDataFromParent() {
         // Process the received data in the child Fragment
+        sharedPreferences = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
         int userId = sharedPreferences.getInt("username",0);
         favouriteDetails = databaseHelper.favouriteDetailsDao().getAllFavourites(userId);
             favouriteRecyclerViewAdapter = new FavouriteRecyclerViewAdapter((ArrayList<FavouriteDetails>) favouriteDetails, getContext());
@@ -87,11 +89,6 @@ public class FravouriteFragment extends Fragment {
         this.view = view;
 
         loadFragment();
-
-
-
-
-
     }
 
     public void  loadFragment(){

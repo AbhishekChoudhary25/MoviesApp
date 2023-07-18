@@ -151,10 +151,7 @@ public class SignInFragment extends Fragment {
                         editor.putInt("username", userDetails.getUserId());
                         editor.apply();
 
-                        UserAccessor.gender = userDetails.getGender();
-                        UserAccessor.password = userDetails.getPassword();
                         UserAccessor.id = userDetails.getUserId();
-                        UserAccessor.username = userDetails.getUsername();
 
                         startActivity(new Intent(getActivity(), HomeScreen.class));
                     }
