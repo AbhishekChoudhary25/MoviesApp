@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
+@SuppressWarnings("ALL")
 @Entity(tableName = "favourites")
 public class FavouriteDetails {
 
@@ -18,7 +18,7 @@ public class FavouriteDetails {
     private String favouriteName;
 
     @ColumnInfo(name="favourite_image_url")
-    private String favouriteImageUrl;
+    private final String favouriteImageUrl;
 
     @Ignore
     public FavouriteDetails(int favouriteId, int userId, String favouriteName, String favouriteImageUrl) {
@@ -62,7 +62,5 @@ public class FavouriteDetails {
         return favouriteImageUrl;
     }
 
-    public void setFavouriteImageUrl(String favouriteImageUrl) {
-        this.favouriteImageUrl = favouriteImageUrl;
-    }
+
 }

@@ -1,7 +1,6 @@
 package com.example.moviesapp.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -21,13 +20,12 @@ import com.example.moviesapp.activities.HomeScreen;
 import com.example.moviesapp.dao.DatabaseHelper;
 import com.example.moviesapp.entities.FavouriteDetails;
 import com.example.moviesapp.models.MovieDetailsPojo;
-import com.example.moviesapp.util.MoviesAppUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class MovieDetailsFragment extends Fragment {
 
     TextView titleTv;
@@ -74,9 +72,9 @@ public class MovieDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         databaseHelper = DatabaseHelper.getDB(getContext());
-
-        getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.main_colour_theme));
-
+        if(getActivity() != null){
+            getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.main_colour_theme));
+        }
 
         titleTv = view.findViewById(R.id.titleTv);
 
@@ -95,9 +93,10 @@ public class MovieDetailsFragment extends Fragment {
         backArrow = view.findViewById(R.id.backArrow);
 
         Bundle details =  getArguments();
-        MovieDetailsPojo movieDetailsPojo = details.getSerializable("movie_det",MovieDetailsPojo.class);
 
-        this.movieDetailsPojo = movieDetailsPojo;
+        if(details != null){
+            this.movieDetailsPojo = details.getSerializable("movie_det",MovieDetailsPojo.class);
+        }
 
         titleTv.setText(movieDetailsPojo.getOriginalTitleText().getText());
 
@@ -113,46 +112,35 @@ public class MovieDetailsFragment extends Fragment {
 
         int userId = sharedPreferences.getInt("username",0);
 
-        addToFavBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(movieDetailsPojo.getPrimaryImage() != null) {
-                    databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), movieDetailsPojo.getPrimaryImage().getUrl()));
-                }
-                else{
-                    databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), "default"));
-                }
-
-                HomeScreen homeScreen = (HomeScreen)getActivity();
-
-                homeScreen.changeInFavourites();
-
-                addToFavBtn.setVisibility(View.GONE);
-                deleteFavBtn.setVisibility(View.VISIBLE);
+        addToFavBtn.setOnClickListener(v -> {
+            if(movieDetailsPojo.getPrimaryImage() != null) {
+                databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), movieDetailsPojo.getPrimaryImage().getUrl()));
             }
+            else{
+                databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), "default"));
+            }
+
+            HomeScreen homeScreen = (HomeScreen)getActivity();
+
+            homeScreen.changeInFavourites();
+
+            addToFavBtn.setVisibility(View.GONE);
+            deleteFavBtn.setVisibility(View.VISIBLE);
         });
 
-        deleteFavBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                databaseHelper.favouriteDetailsDao().deleteFavouriteByUserAndFavName(userId, movieDetailsPojo.getOriginalTitleText().getText());
-                deleteFavBtn.setVisibility(View.GONE);
-                addToFavBtn.setVisibility(View.VISIBLE);
+        deleteFavBtn.setOnClickListener(v -> {
+            databaseHelper.favouriteDetailsDao().deleteFavouriteByUserAndFavName(userId, movieDetailsPojo.getOriginalTitleText().getText());
+            deleteFavBtn.setVisibility(View.GONE);
+            addToFavBtn.setVisibility(View.VISIBLE);
 
-                HomeScreen homeScreen = (HomeScreen)getActivity();
+            HomeScreen homeScreen = (HomeScreen)getActivity();
 
-                homeScreen.changeInFavourites();
-            }
+            homeScreen.changeInFavourites();
         });
 
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().popBackStack();
-            }
-        });
-
-
+        if(getFragmentManager() != null){
+            backArrow.setOnClickListener(v -> getFragmentManager().popBackStack());
+        }
     }
 
     @Override

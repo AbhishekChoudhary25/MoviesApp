@@ -1,6 +1,6 @@
 package com.example.moviesapp.Adapters;
 
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,16 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.moviesapp.R;
 import com.example.moviesapp.dao.DatabaseHelper;
 import com.example.moviesapp.entities.FavouriteDetails;
-import com.example.moviesapp.models.MovieDetailsPojo;
-import com.example.moviesapp.util.MoviesAppUtil;
+
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
 
 public class FavouriteRecyclerViewAdapter extends RecyclerView.Adapter<FavouriteRecyclerViewAdapter.ViewHolder> {
-
-    ArrayList<MovieDetailsPojo> movieDetailsPojo;
 
     ArrayList<FavouriteDetails> favouriteDetails;
 
@@ -39,7 +37,7 @@ public class FavouriteRecyclerViewAdapter extends RecyclerView.Adapter<Favourite
     @NonNull
     @Override
     public FavouriteRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.favourite_card,null,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.favourite_card,parent,false);
         return new ViewHolder(view);
     }
 
@@ -50,23 +48,20 @@ public class FavouriteRecyclerViewAdapter extends RecyclerView.Adapter<Favourite
 
         if(favouriteDetails.get(position).getFavouriteImageUrl() != null){
             if(favouriteDetails.get(position).getFavouriteImageUrl().equals("default")){
-                Picasso.get().load("https://marketplace.canva.com/EAE_E8rjFrI/1/0/1131w/canva-minimal-mystery-of-forest-movie-poster-ggHwd_WiPcI.jpg").resize(200,300).into(holder.favImage);
+                Picasso.get().load("https://marketplace.canva.com/EAE_E8rjFrI/1/0/1131w/canva-minimal-mystery-of-forest-movie-poster-ggHwd_WiPcI.jpg").resize(200,300).placeholder(R.drawable.tv).into(holder.favImage);
             }
             else{
-                Picasso.get().load(favouriteDetails.get(position).getFavouriteImageUrl()).resize(200,300).into(holder.favImage);
+                Picasso.get().load(favouriteDetails.get(position).getFavouriteImageUrl()).resize(200,300).placeholder(R.drawable.tv).into(holder.favImage);
             }
         }
         holder.favTextView.setText(favouriteDetails.get(position).getFavouriteName());
 
-        holder.deleteView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatabaseHelper databaseHelper = DatabaseHelper.getDB(context);
-                databaseHelper.favouriteDetailsDao().deleteFavourite(favouriteDetails.get(position));
-                favouriteDetails.remove(position);
+        holder.deleteView.setOnClickListener(v -> {
+            DatabaseHelper databaseHelper = DatabaseHelper.getDB(context);
+            databaseHelper.favouriteDetailsDao().deleteFavourite(favouriteDetails.get(position));
+            favouriteDetails.remove(position);
 
-                notifyDataSetChanged();
-            }
+            notifyItemChanged(position);
         });
     }
 
@@ -78,7 +73,7 @@ public class FavouriteRecyclerViewAdapter extends RecyclerView.Adapter<Favourite
         return favouriteDetails.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView favImage;
 

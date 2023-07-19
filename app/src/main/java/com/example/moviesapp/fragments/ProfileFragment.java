@@ -66,63 +66,56 @@ public class ProfileFragment extends Fragment {
 
         gender = view.findViewById(R.id.gender);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences;
+          if(getActivity() != null){
+              sharedPreferences = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+              int userId = sharedPreferences.getInt("username",0);
 
-        int userId = sharedPreferences.getInt("username",0);
+              UserDetails userDetails = databaseHelper.userDetailsDAO().findUserWithId(userId);
 
-        UserDetails userDetails = databaseHelper.userDetailsDAO().findUserWithId(userId);
+              String emailValue = "Email :    " + userDetails.getUsername();
+              String ageValue = "Age :    " +userDetails.getAge();
+              String genderValue = "Gender :    " + userDetails.getGender();
+              email.setText(emailValue);
 
-        email.setText("Email :    " + userDetails.getUsername());
+              age.setText(ageValue);
 
-        age.setText("Age :    " +userDetails.getAge() + "");
+              gender.setText(genderValue);
 
-        gender.setText("Gender :    " + userDetails.getGender());
+              profileImage = view.findViewById(R.id.profileImage);
 
-        profileImage = view.findViewById(R.id.profileImage);
+              Picasso.get().load("https://w.wallhaven.cc/full/k9/wallhaven-k9x8y1.png").into(profileImage);
 
-        Picasso.get().load("https://w.wallhaven.cc/full/k9/wallhaven-k9x8y1.png").into(profileImage);
+              button = view.findViewById(R.id.logoutBtn);
+          }
 
-        button = view.findViewById(R.id.logoutBtn);
+        button.setOnClickListener(v -> {
+            SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
 
+            SharedPreferences.Editor editor = sharedPreferences1.edit();
+            editor.putBoolean("flag", false);
+            editor.remove("username");
+            editor.apply();
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+            Dialog dialog = new Dialog(getContext());
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("flag", false);
-                editor.remove("username");
-                editor.apply();
+            dialog.setContentView(R.layout.signout_screen_dialog);
 
-                Dialog dialog = new Dialog(getContext());
+            dialog.setCancelable(false);
 
-                dialog.setContentView(R.layout.signout_screen_dialog);
+            yesAlertBtn = dialog.findViewById(R.id.alertYesBtn);
+            noAlertBtn = dialog.findViewById(R.id.alertNoBtn);
 
-                dialog.setCancelable(false);
+            noAlertBtn.setOnClickListener(v1 -> dialog.dismiss());
 
-                yesAlertBtn = dialog.findViewById(R.id.alertYesBtn);
-                noAlertBtn = dialog.findViewById(R.id.alertNoBtn);
+            yesAlertBtn.setOnClickListener(v12 -> {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                getActivity().finish();
+            });
 
-                noAlertBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                yesAlertBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        getActivity().finish();
-                    }
-                });
-
-                dialog.show();
-            }
+            dialog.show();
         });
 
     }

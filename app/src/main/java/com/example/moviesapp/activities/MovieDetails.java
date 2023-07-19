@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class MovieDetails extends AppCompatActivity {
 
     TextView titleTv;
@@ -81,7 +80,8 @@ public class MovieDetails extends AppCompatActivity {
 
 
         this.movieDetailsPojo = movieDetailsPojo;
-        movieReleaseYearTv.setText(movieDetailsPojo.getReleaseYear().getYear() + "");
+        String releaseYear = movieDetailsPojo.getReleaseYear().getYear() + "";
+        movieReleaseYearTv.setText(releaseYear);
 
         if(movieDetailsPojo.getPrimaryImage() != null){
             Picasso.get().load(movieDetailsPojo.getPrimaryImage().getUrl()).resize(500,800).into(movieImage);
@@ -95,36 +95,30 @@ public class MovieDetails extends AppCompatActivity {
 
         int userId = sharedPreferences.getInt("username",0);
 
-        addToFavBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    if(movieDetailsPojo.getPrimaryImage() != null) {
-                        databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), movieDetailsPojo.getPrimaryImage().getUrl()));
-                    }
-                    else{
-                        databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), "default"));
-                    }
-
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("card", movieDetailsPojo);
-                    setResult(RESULT_OK, resultIntent);
-
-                    addToFavBtn.setVisibility(View.GONE);
-                deleteFavBtn.setVisibility(View.VISIBLE);
+        addToFavBtn.setOnClickListener(v -> {
+                if(movieDetailsPojo.getPrimaryImage() != null) {
+                    databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), movieDetailsPojo.getPrimaryImage().getUrl()));
                 }
-        });
-
-        deleteFavBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                databaseHelper.favouriteDetailsDao().deleteFavouriteByUserAndFavName(userId, movieDetailsPojo.getOriginalTitleText().getText());
-                deleteFavBtn.setVisibility(View.GONE);
-                addToFavBtn.setVisibility(View.VISIBLE);
+                else{
+                    databaseHelper.favouriteDetailsDao().addFavourite(new FavouriteDetails(userId, movieDetailsPojo.getOriginalTitleText().getText(), "default"));
+                }
 
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("card", movieDetailsPojo);
                 setResult(RESULT_OK, resultIntent);
-            }
+
+                addToFavBtn.setVisibility(View.GONE);
+            deleteFavBtn.setVisibility(View.VISIBLE);
+            });
+
+        deleteFavBtn.setOnClickListener(v -> {
+            databaseHelper.favouriteDetailsDao().deleteFavouriteByUserAndFavName(userId, movieDetailsPojo.getOriginalTitleText().getText());
+            deleteFavBtn.setVisibility(View.GONE);
+            addToFavBtn.setVisibility(View.VISIBLE);
+
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("card", movieDetailsPojo);
+            setResult(RESULT_OK, resultIntent);
         });
 
 

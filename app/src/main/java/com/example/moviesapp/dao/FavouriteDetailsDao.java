@@ -6,7 +6,6 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.example.moviesapp.entities.FavouriteDetails;
-import com.example.moviesapp.entities.UserDetails;
 
 import java.util.List;
 

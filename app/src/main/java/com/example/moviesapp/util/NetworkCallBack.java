@@ -23,6 +23,10 @@ public abstract class NetworkCallBack extends ConnectivityManager.NetworkCallbac
     public void onAvailable(@NonNull Network network) {
         super.onAvailable(network);
         onSuccess();
+        if(!hasInternetAccess()){
+            onFailure("No Internet Connection!");
+        }
+
     }
 
     @Override
@@ -47,5 +51,13 @@ public abstract class NetworkCallBack extends ConnectivityManager.NetworkCallbac
 
     public void unRegister(NetworkCallBack networkCallbackAbstract){
         cm.unregisterNetworkCallback(networkCallbackAbstract);
+    }
+    private boolean hasInternetAccess() {
+        Network activeNetwork = cm.getActiveNetwork();
+        if (activeNetwork != null) {
+            NetworkCapabilities capabilities = cm.getNetworkCapabilities(activeNetwork);
+            return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        }
+        return false;
     }
 }

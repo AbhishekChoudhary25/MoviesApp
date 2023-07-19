@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
+@SuppressWarnings("ALL")
 @Entity(tableName = "userdetails")
 public class UserDetails {
     @PrimaryKey(autoGenerate = true)

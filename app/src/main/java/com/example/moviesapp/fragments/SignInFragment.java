@@ -22,13 +22,8 @@ import com.example.moviesapp.R;
 import com.example.moviesapp.activities.HomeScreen;
 import com.example.moviesapp.dao.DatabaseHelper;
 import com.example.moviesapp.entities.UserDetails;
-import com.example.moviesapp.listeners.TextListener;
-import com.example.moviesapp.listeners.UtilTextListener;
-import com.example.moviesapp.models.MovieDetailsPojo;
 import com.example.moviesapp.util.UserAccessor;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -119,57 +114,53 @@ public class SignInFragment extends Fragment {
 
         DatabaseHelper databaseHelper = DatabaseHelper.getDB(getContext());
 
-        signInBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(emailEditText.getText().toString().equals("")){
-                    emailTextFieldLayout.setError("Email Field Cannot be empty!");
-                }
-                if(passwordEditText.getText().toString().equals("")){
-                    passwordTextFieldLayout.setError("Password field cannot be empty!");
-                }
+        signInBtn.setOnClickListener(v -> {
+            if(emailEditText.getText().toString().equals("")){
+                emailTextFieldLayout.setError("Email Field Cannot be empty!");
+            }
+            if(passwordEditText.getText().toString().equals("")){
+                passwordTextFieldLayout.setError("Password field cannot be empty!");
+            }
 
 
-                if(!emailEditText.getText().toString().equals("") && emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null){
-                    UserDetails userDetails = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString().toLowerCase());
+            if(!emailEditText.getText().toString().equals("") && emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null){
+                UserDetails userDetails = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString().toLowerCase());
 
-                    if(userDetails == null){
-                        emailTextFieldLayout.setError("Email Does not exist, Please sign up!");
-                    }
-
-                    if(userDetails != null && !userDetails.getPassword().equals(passwordEditText.getText().toString())){
-                        passwordTextFieldLayout.setError("Incorrect Password!");
-                    }
-                    Boolean checkForEmailError =  emailTextFieldLayout.getError() == null;
-                    Boolean checkForPasswordError = passwordTextFieldLayout.getError() == null;
-
-                    if(checkForPasswordError&& checkForEmailError  && emailEditText.getText().toString().equals(userDetails.getUsername()) && passwordEditText.getText().toString().equals(userDetails.getPassword())){
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
-
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean("flag", true);
-                        editor.putInt("username", userDetails.getUserId());
-                        editor.apply();
-
-                        UserAccessor.id = userDetails.getUserId();
-
-                        startActivity(new Intent(getActivity(), HomeScreen.class));
-                    }
+                if(userDetails == null){
+                    emailTextFieldLayout.setError("Email Does not exist, Please sign up!");
                 }
 
+                if(userDetails != null && !userDetails.getPassword().equals(passwordEditText.getText().toString())){
+                    passwordTextFieldLayout.setError("Incorrect Password!");
+                }
+                boolean checkForEmailError =  emailTextFieldLayout.getError() == null;
+                boolean checkForPasswordError = passwordTextFieldLayout.getError() == null;
+
+                if(checkForPasswordError && checkForEmailError) {
+                    if (userDetails!= null && emailEditText.getText().toString().equals(userDetails.getUsername()) && passwordEditText.getText().toString().equals(userDetails.getPassword())) {
+                        SharedPreferences sharedPreferences;
+
+                        if (getActivity() != null) {
+                            sharedPreferences = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean("flag", true);
+                            editor.putInt("username", userDetails.getUserId());
+                            editor.apply();
+
+                            UserAccessor.id = userDetails.getUserId();
+
+                            startActivity(new Intent(getActivity(), HomeScreen.class));
+                        }
 
 
-
-
+                    }
+                }
             }
         });
 
-        signUpTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SignUpFragment signUpFragment = new SignUpFragment();
-                getParentFragmentManager().beginTransaction().addToBackStack("something").replace(R.id.signin_singup_containerview,signUpFragment).commit();
-            }
+        signUpTv.setOnClickListener(v -> {
+            SignUpFragment signUpFragment = new SignUpFragment();
+            getParentFragmentManager().beginTransaction().addToBackStack("something").replace(R.id.signin_singup_containerview,signUpFragment).commit();
         });
 
     }

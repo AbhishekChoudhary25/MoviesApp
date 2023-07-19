@@ -32,7 +32,7 @@ public class MovieRowRecyclerViewAdapter extends RecyclerView.Adapter<MovieRowRe
     @NonNull
     @Override
     public MovieRowRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.movies_row_recyclerview,null,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.movies_row_recyclerview,parent,false);
         return new ViewHolder(view);
     }
 
@@ -55,7 +55,7 @@ public class MovieRowRecyclerViewAdapter extends RecyclerView.Adapter<MovieRowRe
         return moviesRowRecyclerViewPojo.size();
     }
 
-    class  ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         RecyclerView movieCardRecyclerView;
         TextView childTextView;

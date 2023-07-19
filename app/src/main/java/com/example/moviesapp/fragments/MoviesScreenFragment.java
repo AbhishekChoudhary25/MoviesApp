@@ -1,11 +1,7 @@
 package com.example.moviesapp.fragments;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,7 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +22,6 @@ import android.widget.Toast;
 import com.example.moviesapp.Adapters.MovieRowRecyclerViewAdapter;
 import com.example.moviesapp.Api.RetrofitClient;
 import com.example.moviesapp.R;
-import com.example.moviesapp.activities.HomeScreen;
 import com.example.moviesapp.models.MovieDetailsPojo;
 import com.example.moviesapp.models.MoviesRowRecyclerViewPojo;
 import com.example.moviesapp.models.MovieResultsPojo;
@@ -41,6 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
+@SuppressWarnings("deprecation")
 public class MoviesScreenFragment extends Fragment {
 
     RecyclerView parentRecyclerView;
@@ -59,16 +54,6 @@ public class MoviesScreenFragment extends Fragment {
         // Required empty public constructor
         retrofitClient = new RetrofitClient();
     }
-
-    ArrayList<MovieDetailsPojo> upcomingMovies;
-
-    ArrayList<MovieDetailsPojo> comedyMovies;
-
-    ArrayList<MovieDetailsPojo> actionMovies;
-
-    ArrayList<MovieDetailsPojo> dramaMovies;
-
-    MovieRowRecyclerViewAdapter movieRowRecyclerViewAdapter;
 
     View view;
 
@@ -94,19 +79,21 @@ public class MoviesScreenFragment extends Fragment {
         this.view = view;
         loadFragment();
 
-        networkCallback = new NetworkCallBack(getActivity()) {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(getContext(), "Back Online!", Toast.LENGTH_SHORT).show();
-            }
+        if(getActivity() != null){
+            networkCallback = new NetworkCallBack(getActivity()) {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(getContext(), "Back Online!", Toast.LENGTH_SHORT).show();
+                }
 
-            @Override
-            public void onFailure(String message) {
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        };
+                @Override
+                public void onFailure(String message) {
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                }
+            };
 
-        networkCallback.register(networkCallback);
+            networkCallback.register(networkCallback);
+        }
 
 
 
@@ -119,8 +106,6 @@ public class MoviesScreenFragment extends Fragment {
         parentRecyclerView = view.findViewById(R.id.parentRecyclerView);
 
         progressBar = view.findViewById(R.id.progressBar);
-
-        MovieResultsPojo movieResultsPojo;
 
         ArrayList<MoviesRowRecyclerViewPojo> moviesRowRecyclerViewPojos = new ArrayList<>();
 
@@ -143,7 +128,7 @@ public class MoviesScreenFragment extends Fragment {
         MovieRowRecyclerViewAdapter movieRowRecyclerViewAdapter = new MovieRowRecyclerViewAdapter(moviesRowRecyclerViewPojos,getContext(),getActivity());
         parentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         parentRecyclerView.setAdapter(movieRowRecyclerViewAdapter);
-        movieRowRecyclerViewAdapter.notifyDataSetChanged();
+//        movieRowRecyclerViewAdapter.notifyDataSetChanged();
 
         try{
             upComingMovies(upcomingMovies,movieRowRecyclerViewAdapter);
@@ -152,7 +137,7 @@ public class MoviesScreenFragment extends Fragment {
             getDramaMovies(dramaMovies,movieRowRecyclerViewAdapter);
         }
         catch (Exception e){
-
+            e.printStackTrace();
 
         }
     }
@@ -163,18 +148,22 @@ public class MoviesScreenFragment extends Fragment {
 
         call.enqueue(new Callback<MovieResultsPojo>() {
             @Override
-            public void onResponse(Call<MovieResultsPojo> call, Response<MovieResultsPojo> response) {
+            public void onResponse(@NonNull Call<MovieResultsPojo> call, @NonNull Response<MovieResultsPojo> response) {
                 MovieResultsPojo movieResultsPojo = response.body();
 
-                dramaMovies.addAll(movieResultsPojo.movieDetailsPojoList);
-                movieRowRecyclerViewAdapter.notifyDataSetChanged();
+                if(movieResultsPojo != null){
+                    dramaMovies.addAll(movieResultsPojo.movieDetailsPojoList);
+//                    movieRowRecyclerViewAdapter.notifyDataSetChanged();
+                    movieRowRecyclerViewAdapter.notifyItemRangeChanged(0,dramaMovies.size() - 1);
+                }
+
 
                 progressBar.setVisibility(View.GONE);
 
             }
 
             @Override
-            public void onFailure(Call<MovieResultsPojo> call, Throwable t) {
+            public void onFailure(@NonNull Call<MovieResultsPojo> call, @NonNull Throwable t) {
 
             }
         });
@@ -186,18 +175,22 @@ public class MoviesScreenFragment extends Fragment {
 
         call.enqueue(new Callback<MovieResultsPojo>() {
             @Override
-            public void onResponse(Call<MovieResultsPojo> call, Response<MovieResultsPojo> response) {
+            public void onResponse(@NonNull Call<MovieResultsPojo> call, @NonNull Response<MovieResultsPojo> response) {
                 MovieResultsPojo movieResultsPojo = response.body();
 
-                comedyMovies.addAll(movieResultsPojo.movieDetailsPojoList);
-                movieRowRecyclerViewAdapter.notifyDataSetChanged();
+                if(movieResultsPojo != null){
+                    comedyMovies.addAll(movieResultsPojo.movieDetailsPojoList);
+//                    movieRowRecyclerViewAdapter.notifyDataSetChanged();
+                    movieRowRecyclerViewAdapter.notifyItemRangeChanged(0, comedyMovies.size() - 1);
+                }
+
 
                 progressBar.setVisibility(View.GONE);
 
             }
 
             @Override
-            public void onFailure(Call<MovieResultsPojo> call, Throwable t) {
+            public void onFailure(@NonNull Call<MovieResultsPojo> call, @NonNull Throwable t) {
 
             }
         });
@@ -209,17 +202,21 @@ public class MoviesScreenFragment extends Fragment {
 
         call.enqueue(new Callback<MovieResultsPojo>() {
             @Override
-            public void onResponse(Call<MovieResultsPojo> call, Response<MovieResultsPojo> response) {
+            public void onResponse(@NonNull Call<MovieResultsPojo> call, @NonNull Response<MovieResultsPojo> response) {
                 MovieResultsPojo movieResultsPojo = response.body();
 
-                actionMovies.addAll(movieResultsPojo.movieDetailsPojoList);
-                movieRowRecyclerViewAdapter.notifyDataSetChanged();
+                if(movieResultsPojo != null){
+                    actionMovies.addAll(movieResultsPojo.movieDetailsPojoList);
+//                    movieRowRecyclerViewAdapter.notifyDataSetChanged();
+                    movieRowRecyclerViewAdapter.notifyItemRangeChanged(0, actionMovies.size());
+                }
+
                 progressBar.setVisibility(View.GONE);
 
             }
 
             @Override
-            public void onFailure(Call<MovieResultsPojo> call, Throwable t) {
+            public void onFailure(@NonNull Call<MovieResultsPojo> call, @NonNull Throwable t) {
 
             }
         });
@@ -233,18 +230,21 @@ public class MoviesScreenFragment extends Fragment {
 
         call.enqueue(new Callback<MovieResultsPojo>() {
             @Override
-            public void onResponse(Call<MovieResultsPojo> call, Response<MovieResultsPojo> response) {
+            public void onResponse(@NonNull Call<MovieResultsPojo> call, @NonNull Response<MovieResultsPojo> response) {
                 MovieResultsPojo movieResultsPojo = response.body();
 
-                movieDetailsPojos.addAll(movieResultsPojo.movieDetailsPojoList);
+                if(movieResultsPojo != null){
+                    movieDetailsPojos.addAll(movieResultsPojo.movieDetailsPojoList);
+//                    movieRowRecyclerViewAdapter.notifyDataSetChanged();
+                    movieRowRecyclerViewAdapter.notifyItemRangeChanged(0,movieDetailsPojos.size() - 1);
+
+                }
                 progressBar.setVisibility(View.GONE);
-                movieRowRecyclerViewAdapter.notifyDataSetChanged();
-                System.out.println(movieResultsPojo.movieDetailsPojoList.get(0).getPrimaryImage().getUrl());
 
             }
 
             @Override
-            public void onFailure(Call<MovieResultsPojo> call, Throwable t) {
+            public void onFailure(@NonNull Call<MovieResultsPojo> call, @NonNull Throwable t) {
                 System.out.println("Bt");
             }
         });
@@ -252,30 +252,30 @@ public class MoviesScreenFragment extends Fragment {
 
 
      public void checkConnection(){
-         ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+         ConnectivityManager cm;
+         NetworkInfo networkInfo;
 
-         Dialog dialog = new Dialog(getContext());
+         if(getContext() != null){
+             cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+             networkInfo = cm.getActiveNetworkInfo();
+             Dialog dialog = new Dialog(getContext());
 
-         dialog.setContentView(R.layout.error_layout);
+             dialog.setContentView(R.layout.error_layout);
 
-         dialog.setCancelable(false);
+             dialog.setCancelable(false);
 
-         yesAlertBtn = dialog.findViewById(R.id.alertYesBtn);
+             yesAlertBtn = dialog.findViewById(R.id.alertYesBtn);
 
-         yesAlertBtn.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
+             yesAlertBtn.setOnClickListener(v -> {
                  loadFragment();
                  dialog.dismiss();
 
+             });
+
+             if (networkInfo == null && !networkInfo.isConnectedOrConnecting()) {
+                 dialog.show();
              }
-         });
-
-         if (networkInfo == null) {
-             dialog.show();
          }
-
      }
     @Override
     public void onResume() {

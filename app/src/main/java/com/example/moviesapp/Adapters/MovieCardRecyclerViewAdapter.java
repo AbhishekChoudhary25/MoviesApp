@@ -2,7 +2,6 @@ package com.example.moviesapp.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moviesapp.R;
 import com.example.moviesapp.activities.HomeScreen;
-import com.example.moviesapp.activities.MovieDetails;
 import com.example.moviesapp.fragments.MovieDetailsFragment;
-import com.example.moviesapp.fragments.SignUpFragment;
 import com.example.moviesapp.models.MovieDetailsPojo;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +34,7 @@ public class MovieCardRecyclerViewAdapter extends RecyclerView.Adapter<MovieCard
     @NonNull
     @Override
     public MovieCardRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view  = LayoutInflater.from(context).inflate(R.layout.movies_card_recyclerview,null,false);
+        View view  = LayoutInflater.from(context).inflate(R.layout.movies_card_recyclerview,parent,false);
         return new ViewHolder(view);
     }
 
@@ -46,23 +43,17 @@ public class MovieCardRecyclerViewAdapter extends RecyclerView.Adapter<MovieCard
         ImageView titleImage = holder.movieImage;
 
         if(movieDetailsPojo.get(position).getPrimaryImage() != null){
-            Picasso.get().load(movieDetailsPojo.get(position).getPrimaryImage().getUrl()).resize(400,600).into(titleImage);
+            Picasso.get().load(movieDetailsPojo.get(position).getPrimaryImage().getUrl()).placeholder(R.drawable.tv).resize(400,600).into(titleImage);
         }
         else{
-            Picasso.get().load("https://marketplace.canva.com/EAE_E8rjFrI/1/0/1131w/canva-minimal-mystery-of-forest-movie-poster-ggHwd_WiPcI.jpg").resize(400,600).into(titleImage);
+            Picasso.get().load("https://marketplace.canva.com/EAE_E8rjFrI/1/0/1131w/canva-minimal-mystery-of-forest-movie-poster-ggHwd_WiPcI.jpg").placeholder(R.drawable.tv).resize(400,600).into(titleImage);
         }
 
-        titleImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent intent = new Intent(v.getContext(), MovieDetails.class);
-//                intent.putExtra("movieDetails",movieDetailsPojo.get(position));
-//                activity.startActivityForResult(intent,REQUEST_CODE_CHILD_ACTIVITY);
-                MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment();
-                HomeScreen homeScreen = (HomeScreen)activity;
-                homeScreen.changeFragment(movieDetailsFragment,movieDetailsPojo.get(position));
+        titleImage.setOnClickListener(v -> {
+            MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment();
+            HomeScreen homeScreen = (HomeScreen)activity;
+            homeScreen.changeFragment(movieDetailsFragment,movieDetailsPojo.get(position));
 
-            }
         });
 
 
@@ -73,7 +64,7 @@ public class MovieCardRecyclerViewAdapter extends RecyclerView.Adapter<MovieCard
         return movieDetailsPojo.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView movieImage;
         public ViewHolder(@NonNull View itemView) {

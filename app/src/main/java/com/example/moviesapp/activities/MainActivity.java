@@ -6,29 +6,19 @@ import androidx.fragment.app.FragmentContainerView;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 
 import com.example.moviesapp.R;
-import com.example.moviesapp.fragments.FravouriteFragment;
+
 import com.example.moviesapp.fragments.SignInFragment;
-import com.example.moviesapp.models.MovieDetailsPojo;
-import com.example.moviesapp.util.NetworkReciever;
 
-import java.util.ArrayList;
-import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends AppCompatActivity {
 
     FragmentContainerView fragmentContainerView;
 
-    String email;
-
-    String password;
 
 
 
@@ -43,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
 
-        Boolean isLoggedIn = sharedPreferences.getBoolean("flag",false);
+        boolean isLoggedIn = sharedPreferences.getBoolean("flag",false);
 
         if(isLoggedIn){
             startActivity(new Intent(MainActivity.this, HomeScreen.class));

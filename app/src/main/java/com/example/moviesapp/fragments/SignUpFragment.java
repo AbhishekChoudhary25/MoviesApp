@@ -1,7 +1,6 @@
 package com.example.moviesapp.fragments;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,11 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.moviesapp.R;
-import com.example.moviesapp.activities.MainActivity;
 import com.example.moviesapp.dao.DatabaseHelper;
 import com.example.moviesapp.entities.UserDetails;
-import com.example.moviesapp.listeners.TextListener;
-import com.example.moviesapp.listeners.UtilTextListener;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.regex.Matcher;
@@ -97,12 +93,6 @@ public class SignUpFragment extends Fragment {
 
         signInTv = view.findViewById(R.id.signInTv);
 
-//        emailEditText.addTextChangedListener(new TextListener(emailEditText,passwordEditText,emailTextFieldLayout,passwordTextFieldLayout ,getContext()));
-
-//        passwordEditText.addTextChangedListener(new TextListener(emailEditText,passwordEditText,emailTextFieldLayout,passwordTextFieldLayout ,getContext()));
-
-//        confirmPassword.addTextChangedListener(new UtilTextListener(confirmPassword, confirmTextFieldLayout, getContext()));
-
         emailEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -173,7 +163,8 @@ public class SignUpFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                ageText.setText(progress + " years");
+                String age = progress + " years";
+                ageText.setText(age);
             }
 
             @Override
@@ -187,78 +178,69 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-        signUpBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(emailEditText.getText().toString().equals("")){
-                    emailTextFieldLayout.setError("Email Field Cannot be empty!");
+        signUpBtn.setOnClickListener(v -> {
+            if(emailEditText.getText().toString().equals("")){
+                emailTextFieldLayout.setError("Email Field Cannot be empty!");
+            }
+            if(passwordEditText.getText().toString().equals("")){
+                passwordTextFieldLayout.setError("Password field cannot be empty!");
+            }
+            if(confirmPassword.getText().toString().equals("")){
+                confirmTextFieldLayout.setError("Cannot be empty!");
+            }
+
+            if(emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null && confirmPassword.getText() != null && passwordEditText.getText() != null && emailEditText.getText() != null&& passwordEditText.getText().toString().equals(confirmPassword.getText().toString())){
+                UserDetails user = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString());
+
+                if(user != null){
+                    emailTextFieldLayout.setError("User already exists!");
                 }
-                if(passwordEditText.getText().toString().equals("")){
-                    passwordTextFieldLayout.setError("Password field cannot be empty!");
+            }
+
+
+            String selectedGender;
+
+            if(genderRadioGroup.getCheckedRadioButtonId() == R.id.radioMale){
+                selectedGender = "Male";
+            }
+            else{
+                selectedGender = "Female";
+            }
+
+            if(emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null && passwordEditText.getText().toString().equals(confirmPassword.getText().toString())){
+                databaseHelper.userDetailsDAO().adduser(new UserDetails(emailEditText.getText().toString().toLowerCase(),passwordEditText.getText().toString(),selectedGender,seekBar.getProgress()));
+
+                Dialog dialog = new Dialog(getContext());
+
+                dialog.setContentView(R.layout.sucess_layout);
+
+                dialog.setCancelable(false);
+
+                yesAlertBtn = dialog.findViewById(R.id.alertYesBtn);
+
+                yesAlertBtn.setOnClickListener(v1 -> {
+                    SignInFragment signInFragment = new SignInFragment();
+                    getParentFragmentManager().beginTransaction().replace(R.id.signin_singup_containerview,signInFragment).commit();
+                    dialog.dismiss();
+
+                });
+
+                dialog.show();
+            }
+            else{
+                if(confirmTextFieldLayout.getError() == null && emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null){
+                    Toast.makeText(getContext(), "Password Did not match!", Toast.LENGTH_LONG).show();
                 }
-                if(confirmPassword.getText().toString().equals("")){
-                    confirmTextFieldLayout.setError("Cannot be empty!");
-                }
-
-                if(emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null && confirmPassword.getText() != null && passwordEditText.getText() != null && emailEditText.getText() != null&& passwordEditText.getText().toString().equals(confirmPassword.getText().toString())){
-                    UserDetails user = databaseHelper.userDetailsDAO().findUserWithName(emailEditText.getText().toString());
-
-                    if(user != null){
-                        emailTextFieldLayout.setError("User already exists!");
-                    }
-                }
-
-
-                String selectedGender = "";
-
-                if(genderRadioGroup.getCheckedRadioButtonId() == R.id.radioMale){
-                    selectedGender = "Male";
-                }
-                else{
-                    selectedGender = "Female";
-                }
-
-                if(emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null && passwordEditText.getText().toString().equals(confirmPassword.getText().toString())){
-                    databaseHelper.userDetailsDAO().adduser(new UserDetails(emailEditText.getText().toString().toLowerCase(),passwordEditText.getText().toString(),selectedGender,seekBar.getProgress()));
-
-                    Dialog dialog = new Dialog(getContext());
-
-                    dialog.setContentView(R.layout.sucess_layout);
-
-                    dialog.setCancelable(false);
-
-                    yesAlertBtn = dialog.findViewById(R.id.alertYesBtn);
-
-                    yesAlertBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            SignInFragment signInFragment = new SignInFragment();
-                            getParentFragmentManager().beginTransaction().replace(R.id.signin_singup_containerview,signInFragment).commit();
-                            dialog.dismiss();
-
-                        }
-                    });
-
-                    dialog.show();
-                }
-                else{
-                    if(confirmTextFieldLayout.getError() == null && emailTextFieldLayout.getError() == null && passwordTextFieldLayout.getError() == null){
-                        Toast.makeText(getContext(), "Password Did not match!", Toast.LENGTH_LONG).show();
-                    }
-
-                }
-
-
 
             }
+
+
+
         });
 
-        signInTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SignInFragment signInFragment = new SignInFragment();
-                getParentFragmentManager().beginTransaction().replace(R.id.signin_singup_containerview,signInFragment).commit();
-            }
+        signInTv.setOnClickListener(v -> {
+            SignInFragment signInFragment = new SignInFragment();
+            getParentFragmentManager().beginTransaction().replace(R.id.signin_singup_containerview,signInFragment).commit();
         });
     }
     private boolean validEmail(String email){

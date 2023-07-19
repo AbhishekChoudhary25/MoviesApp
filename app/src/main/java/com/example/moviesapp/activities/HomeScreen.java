@@ -1,24 +1,14 @@
 package com.example.moviesapp.activities;
 
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TableLayout;
-import android.widget.TextView;
 
 import com.example.moviesapp.Adapters.HomeScreenViewPagerAdapter;
 import com.example.moviesapp.R;
@@ -26,35 +16,25 @@ import com.example.moviesapp.fragments.FravouriteFragment;
 import com.example.moviesapp.fragments.MoviesScreenFragment;
 import com.example.moviesapp.fragments.ProfileFragment;
 import com.example.moviesapp.models.MovieDetailsPojo;
-import com.example.moviesapp.util.NetworkCallBack;
-import com.example.moviesapp.util.NetworkReciever;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class HomeScreen extends AppCompatActivity{
 
     TabLayout tabLayout;
 
     ViewPager2 viewPager;
 
-    ConnectivityManager connectivityManager;
 
-    Boolean isConnected;
 
     private static final int REQUEST_CODE_CHILD_ACTIVITY = 1;
 
-
-    NetworkReciever networkChangeReceiver;
     List<Fragment> fragments;
 
-    NetworkCallBack networkCallBack;
 
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -62,7 +42,13 @@ public class HomeScreen extends AppCompatActivity{
             if (resultCode == RESULT_OK) {
 
                 FravouriteFragment fragment = (FravouriteFragment)fragments.get(1);
-                fragment.receiveDataFromParent();
+
+                try{
+                    fragment.receiveDataFromParent();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
 
             } else if (resultCode == RESULT_CANCELED) {
                 System.out.println("Result Cancelled");
@@ -139,41 +125,7 @@ public class HomeScreen extends AppCompatActivity{
         super.onDestroy();
     }
 
-    private void registerNetworkCallback(){
 
-
-        try {
-
-            connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-            connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback(){
-
-                @Override
-                public void onAvailable(@NonNull Network network) {
-                    isConnected = true;
-                }
-
-                @Override
-                public void onLost(@NonNull Network network) {
-                    isConnected = false;
-                }
-            });
-
-
-
-
-        }catch (Exception e){
-
-            isConnected = false;
-
-        }
-
-    }
-
-    private void unregisterNetworkCallback(){
-
-        connectivityManager.unregisterNetworkCallback(new ConnectivityManager.NetworkCallback());
-
-    }
 
     public void changeFragment(Fragment fragment,MovieDetailsPojo movieDetailsPojo){
         Bundle movieDetailsBundle = new Bundle();

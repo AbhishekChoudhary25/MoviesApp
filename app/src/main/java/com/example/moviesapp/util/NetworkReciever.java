@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+@SuppressWarnings("deprecation")
 public class NetworkReciever extends BroadcastReceiver {
     Activity activity;
 
@@ -24,8 +25,6 @@ public class NetworkReciever extends BroadcastReceiver {
                 restartIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 activity.startActivity(restartIntent);
             }
-        } else {
-//            context.startActivity(new Intent(context, ErrorIntent.class));
         }
     }
 }

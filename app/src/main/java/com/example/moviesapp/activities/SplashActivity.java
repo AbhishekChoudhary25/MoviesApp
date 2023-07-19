@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.example.moviesapp.R;
-
+@SuppressWarnings("ALL")
 public class SplashActivity extends AppCompatActivity {
 
     @Override
@@ -17,13 +17,10 @@ public class SplashActivity extends AppCompatActivity {
 
         getWindow().setStatusBarColor(getResources().getColor(R.color.main_colour_theme));
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         },1500);
 
 
